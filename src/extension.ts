@@ -68,7 +68,7 @@ async function searchCommand(): Promise<void> {
     }
 
     // Search in browser.
-    await copy(
+    await open(
         `${getSourcegraphUrl()}/-/editor` +
             `?remote_url=${encodeURIComponent(remoteURL)}` +
             `&branch=${encodeURIComponent(branch)}` +
@@ -80,7 +80,7 @@ async function searchCommand(): Promise<void> {
 }
 
 /**
- * The command implementation for copying a Sourcegraph page to a file.
+ * The command implementation for copying a Sourcegraph page to the clipboard.
  */
 async function copyCommand(): Promise<void> {
     const editor = vscode.window.activeTextEditor
@@ -92,8 +92,8 @@ async function copyCommand(): Promise<void> {
         return
     }
 
-    // Open in browser.
-    (
+    // Copy to clipboard.
+    await copy (
         `${getSourcegraphUrl()}/-/editor` +
             `?remote_url=${encodeURIComponent(remoteURL)}` +
             `&branch=${encodeURIComponent(branch)}` +
@@ -105,6 +105,30 @@ async function copyCommand(): Promise<void> {
             `&end_row=${encodeURIComponent(String(editor.selection.end.line))}` +
             `&end_col=${encodeURIComponent(String(editor.selection.end.character))}`
     )
+}
+
+/**
+ * Open link from sourcegraph.com corresponding to a local file.
+ */
+async function editCommand(): Promise<void> {
+    const editor = vscode.window.activeTextEditor
+    if (!editor) {
+        throw new Error('No active editor')
+    }
+    //Get URL from user
+    const input = await vscode.window.showInputBox("Sourcegraph URL: ")
+    vscode.window.showInformationMessage(input)
+
+    // Get file path
+    var index = input.lastIndexOf("/") + 1
+    var filename = input.substr(index)
+
+    
+
+
+
+
+
 }
 
 /**
